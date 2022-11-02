@@ -11,6 +11,10 @@ local function keyword(name, keywords)
   vim.api.nvim_command("syn keyword " .. name .. " " .. keywords_str)
 end
 
+local function match(name, pattern)
+  vim.api.nvim_command("syn match " .. name .. ' "' .. pattern .. '"')
+end
+
 local function hi(group, link)
   vim.api.nvim_command("hi def link " .. group .. " " .. link)
 end
@@ -96,6 +100,9 @@ keyword("scillaSpecial", {
   "scilla_version",
 })
 
+-- Syntax errors
+match("scillaError", "\\<\\%(end\\)\\>")
+
 region("scillaComment", "(\\*", "\\*)")
 
 region_g("scillaTransition", "scillaFunction", "\\<transition\\>", "\\<end\\>")
@@ -105,5 +112,6 @@ hi("scillaString", "String")
 hi("scillaKeyword", "Keyword")
 hi("scillaType", "Type")
 hi("scillaSpecial", "Special")
+hi("scillaError", "Error")
 hi("scillaComment", "Comment")
 hi("scillaFunction", "Function")
