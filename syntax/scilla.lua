@@ -25,12 +25,13 @@ local function region(name, r_start, r_end)
   )
 end
 
-local function region_g(name, group, r_start, r_end)
+local function region_g(name, matchgroup, opts, r_start, r_end)
   vim.api.nvim_command(
     "syn region "
       .. name
-      .. " transparent matchgroup="
-      .. group
+      .. table.concat(opts, " ")
+      .. " matchgroup="
+      .. matchgroup
       .. ' start="'
       .. r_start
       .. '" end="'
@@ -105,13 +106,44 @@ match("scillaError", "\\<\\%(end\\)\\>")
 
 region("scillaComment", "(\\*", "\\*)")
 
-region_g("scillaTransition", "scillaFunction", "\\<transition\\>", "\\<end\\>")
-region_g("scillaProcedure", "scillaFunction", "\\<procedure\\>", "\\<end\\>")
+-- Functions and procedures
+local function hi_fun(name, kwd)
+  -- syn region luaFunctionBlock transparent matchgroup=luaFunction start="\<function\>" end="\<end\>" contains=ALLBUT,luaTodo,luaSpecial,luaElseifThen,luaElse,luaThenEnd,luaIn
+  region_g(
+    name,
+    "scillaFunction",
+    { "transparent", "contains=ALLBUT,scillaWithEnd" },
+    "\\<" .. kwd .. "\\>",
+    "\\<end\\>"
+  )
+end
+hi_fun("scillaTransition", "transition")
+hi_fun("scillaProcedure", "procedure")
+
+-- match ... end
+-- syn region luaIfThen transparent matchgroup=luaCond start="\<if\>" end="\<then\>"me=e-4           contains=ALLBUT,luaTodo,luaSpecial,luaElseifThen,luaElse,luaIn nextgroup=luaThenEnd skipwhite skipempty
+region_g("scillaMatchWith", "scillaCond", {
+  "contained",
+  "transparent",
+  "contains=ALLBUT,scillaFunction",
+  "nextgroup=scillaWithEnd",
+  "skipwhite",
+  "skipempty",
+}, "\\<match\\>", "\\<with\\>")
+-- syn region luaThenEnd contained transparent matchgroup=luaCond start="\<then\>" end="\<end\>" contains=ALLBUT,luaTodo,luaSpecial,luaThenEnd,luaIn
+region_g(
+  "scillaWithEnd",
+  "scillaCond",
+  { "contained", "transparent", "contains=ALLBUT,scillaWithEnd" },
+  "\\<with>\\>",
+  "\\<end>\\>"
+)
 
 hi("scillaString", "String")
 hi("scillaKeyword", "Keyword")
 hi("scillaType", "Type")
 hi("scillaSpecial", "Special")
+hi("scillaCond", "Special")
 hi("scillaError", "Error")
 hi("scillaComment", "Comment")
 hi("scillaFunction", "Function")
