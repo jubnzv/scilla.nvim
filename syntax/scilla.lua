@@ -78,6 +78,11 @@ keyword("scillaType", {
   -- Types defined as keywords
   "Emp",
   "Map",
+  -- Names of built-in ADTs (`src/base/Datatypes.ml`)
+  "Bool",
+  "Option",
+  "List",
+  "Pair",
   -- Primitive types defined in `src/base/Type.ml`
   "Int32",
   "Int64",
