@@ -104,6 +104,11 @@ keyword("scillaSpecial", {
   "scilla_version",
   -- Special identifiers starting with `_`
   "_return",
+  -- Blockchain query operations
+  "BLOCKNUMBER",
+  "CHAINID",
+  "TIMESTAMP",
+  "REPLICATE_CONTRACT",
 })
 
 -- Syntax errors
