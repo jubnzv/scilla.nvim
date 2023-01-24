@@ -62,7 +62,6 @@ keyword("scillaKeyword", {
   "event",
   "field",
   "accept",
-  "return",
   "exists",
   "delete",
   "type",
@@ -71,7 +70,6 @@ keyword("scillaKeyword", {
   "catch",
   "as",
   "throw",
-  "return",
 })
 
 keyword("scillaType", {
@@ -104,6 +102,8 @@ keyword("scillaType", {
 
 keyword("scillaSpecial", {
   "scilla_version",
+  -- Special identifiers starting with `_`
+  "_return",
 })
 
 -- Syntax errors
